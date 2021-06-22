@@ -21,38 +21,21 @@ import kotlin.io.path.toPath
 
 @Validated
 @Controller("/api/v1/clientes/{clienteId}")
-open class NovaChavePixController(
+class NovaChavePixController(
     @Inject val grpcClient: NovaChavePixServiceGrpc.NovaChavePixServiceBlockingStub
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     @Post("/chaves")
-    open fun cadastrar(@PathVariable clienteId: UUID, @Valid request: NovaChavePixRequest) : MutableHttpResponse<Any>{
-        logger.info("criando uma nova chave pix para clienteId: $clienteId e inf: $request")
+    fun cadastrar(@PathVariable clienteId: UUID, @Valid request: NovaChavePixRequest) : MutableHttpResponse<Any>{
+        logger.info("criando uma nova chave pix para clienteId: $clienteId");
 
-        try {
-            val response = grpcClient.registrar(request.paraModeloGrpc(clienteId))
+        val response = grpcClient.registrar(request.paraModeloGrpc(clienteId))
 
-            val uri  = UriBuilder
-                .of("/api/v1/clientes/{clienteId}/chaves/{pixId}")
-                .expand(mutableMapOf("clienteId" to clienteId, "pixId" to response.pixId))
+        val uri  = UriBuilder
+            .of("/api/v1/clientes/{clienteId}/chaves/{pixId}")
+            .expand(mutableMapOf("clienteId" to clienteId, "pixId" to response.pixId))
 
-            return HttpResponse.created(uri)
-
-        }catch (e: StatusRuntimeException){
-            val descricao = e.status.description
-            val statusCode = e.status.code
-
-            when(statusCode){
-                Status.Code.INVALID_ARGUMENT -> throw HttpStatusException(HttpStatus.BAD_REQUEST, descricao)
-                Status.Code.FAILED_PRECONDITION -> throw HttpStatusException(HttpStatus.BAD_REQUEST, descricao)
-                Status.Code.ALREADY_EXISTS -> throw HttpStatusException(HttpStatus.UNPROCESSABLE_ENTITY, descricao)
-                Status.Code.NOT_FOUND -> throw HttpStatusException(HttpStatus.NOT_FOUND, descricao)
-            }
-
-            throw HttpStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.message)
-        }
-
-
+        return HttpResponse.created(uri)
     }
 }
