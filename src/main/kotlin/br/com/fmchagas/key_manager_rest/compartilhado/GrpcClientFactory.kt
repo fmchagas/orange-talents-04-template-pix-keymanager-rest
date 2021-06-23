@@ -1,6 +1,7 @@
 package br.com.fmchagas.key_manager_rest.compartilhado
 
 import br.com.fmchagas.key_manager_grpc.grpc.NovaChavePixServiceGrpc
+import br.com.fmchagas.key_manager_grpc.grpc.RemoveChavePixServiceGrpc
 import io.grpc.ManagedChannel
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
@@ -17,5 +18,8 @@ class GrpcClientFactory(@GrpcChannel("key_manager_grpc_client") val canal : Mana
 
     @Singleton
     fun registraChave() = NovaChavePixServiceGrpc.newBlockingStub(canal)
+
+    @Singleton
+    fun removeChave() = RemoveChavePixServiceGrpc.newBlockingStub(canal)
 
 }
