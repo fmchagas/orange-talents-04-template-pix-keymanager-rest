@@ -1,5 +1,7 @@
 package br.com.fmchagas.key_manager_rest.compartilhado
 
+import br.com.fmchagas.key_manager_grpc.grpc.ConsultarChavePixServiceGrpc
+import br.com.fmchagas.key_manager_grpc.grpc.ListarChavePixServiceGrpc
 import br.com.fmchagas.key_manager_grpc.grpc.NovaChavePixServiceGrpc
 import br.com.fmchagas.key_manager_grpc.grpc.RemoveChavePixServiceGrpc
 import io.grpc.ManagedChannel
@@ -22,4 +24,9 @@ class GrpcClientFactory(@GrpcChannel("key_manager_grpc_client") val canal : Mana
     @Singleton
     fun removeChave() = RemoveChavePixServiceGrpc.newBlockingStub(canal)
 
+    @Singleton
+    fun consultaChave() = ConsultarChavePixServiceGrpc.newBlockingStub(canal)
+
+    @Singleton
+    fun listaChaves() = ListarChavePixServiceGrpc.newBlockingStub(canal)
 }
