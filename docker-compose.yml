@@ -6,8 +6,8 @@ services:
         build:
             dockerfile: ./Dockerfile
             context: .
-        image: fmchagas/key_manager_rest
-        container_name: key_manager_rest
+        image: fmchagas/key-manager-rest
+        container_name: key-manager-rest
         ports:
             - 8080:8080
         environment:

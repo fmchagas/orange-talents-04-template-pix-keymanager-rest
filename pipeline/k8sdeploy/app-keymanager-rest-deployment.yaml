@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: key-manager-rest-deployment
+#  labels:
+#    app: essa label do Deployment é para outro serviço encontar?
+spec:
+  # metadata:labels + selector:matchLabels + template:metadata:labels ->
+  # deve ter mesmos nomes para funcionar(tanto no app quanto no tier se definido)
+  replicas: 1
+  selector:
+    matchLabels:
+      app: key-manager-rest #link template:metadata:labels:app
+  template:
+    metadata:
+      name: key-manager-rest
+      labels:
+        app: key-manager-rest
+    spec:
+      containers:
+        - name: key-manager-grpc-container
+          image: fmchagas/key-manager-rest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: keymanager-rest-configmap

@@ -31,6 +31,7 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("io.micronaut:micronaut-management")//health
 
     implementation("io.micronaut:micronaut-validation")
     implementation("io.micronaut.beanvalidation:micronaut-hibernate-validator")
